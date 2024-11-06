@@ -9,6 +9,8 @@ import java.util.ConcurrentModificationException;
  * Iterator including remove()
  *
  * @author Daylen Mathews cs221-3
+ *
+ * @param <T> The type of elements in this list
  */
 public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 
@@ -104,7 +106,6 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
             tail = newNode;
         }
         size++;
-
         versionNumber++;
     }
 
@@ -161,16 +162,23 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
                 throw new NoSuchElementException();
             }
 
-            T retVal = null;
+            T retVal;
+
+            //Check if element is at head
             if (element.equals(head.getElement())) {
                 retVal = head.getElement();
                 head = (Node<T>) head.getNextNode();
+                //update tail if the list becomes empty
                 if (head == null) {
                     tail = null;
                 }
+                size--;
+                versionNumber++;
+                return retVal;
             }
+
             Node<T> currentNode = head;
-            while (currentNode.getNextNode() != null //or currentNode == tail
+            while (currentNode.getNextNode() != null //or currentNode == tail 
                     && !currentNode.getNextNode().getElement().equals(element)) {
                 currentNode = (Node<T>) currentNode.getNextNode();
             }
